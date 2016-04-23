@@ -18,8 +18,13 @@ import argparse
 
 def s2(universe, frames_no=-1):
     # extract N-H bonds
-    hn = universe.select_atoms('name HN and not resname PRO')
     n = universe.select_atoms('name N and not resname PRO and not bynum 1')    # ignore the first N
+    hn = universe.select_atoms('name HN and not resname PRO')
+    # depending on the force field, this atom could be named H instead
+    if len(hn) == 0:    hn = universe.select_atoms('name H and not resname PRO')
+
+    # same number of N and H atoms selected
+    assert len(hn) == len(n) != 0
 
     # for each residue there are two atoms, which are just after the other
     # e.g. atom 20 corresponds to 21, atoms 41 corresponds to 42, etc

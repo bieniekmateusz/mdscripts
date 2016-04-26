@@ -121,7 +121,7 @@ if __name__ == "__main__":
     s2s_data = s2(u, frames_no=last_frame)
 
     # output to file
-    output = os.linesep.join(["%d %f" % (resid, nhS2s) for resid, nhS2s in s2s_data])
+    output = os.linesep.join(["%d %f" % (resid, nhS2s) for resid, nhS2s in s2s_data]) + os.linesep
     open(output_s2_file, 'w').write(output)
 
     print

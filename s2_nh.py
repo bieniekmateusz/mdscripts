@@ -5,6 +5,11 @@ Based modelled on Enrico's script "calculation-s2-dipole-backbone-aa.py". The ca
 Calculation of s2 of the N-H of the backbone using the equation 12 of the following article
 http://www.sciencedirect.com/science/article/pii/S0022283684700908
 
+Before use:
+- install MDAnalysis, numpy, scipy (pip install ...)
+
+Ensure that your trajectory has removed degrees of freedom (in gromacs, gmx trjconv -fit rot+trans)
+
 Mateusz Bieniek & Enrico Spiga
 """
 
@@ -26,9 +31,8 @@ def s2(universe, frames_no=-1):
     # same number of N and H atoms selected
     assert len(hn) == len(n) != 0
 
-    # for each residue there are two atoms, which are just after the other
-    # e.g. atom 20 corresponds to 21, atoms 41 corresponds to 42, etc
-    assert all([left.index == right.index + 1 for left, right in zip(hn, n)])
+    # the corresponding N and NH belong to the same residue id
+    assert all([left.resid == right.resid for left, right in zip(hn, n)])
 
     # corresponding resids of the selected atoms
     resids = hn.resids
@@ -80,8 +84,8 @@ def s2(universe, frames_no=-1):
 if __name__ == "__main__":
     # argument parser
     argparser = argparse.ArgumentParser()
-    argparser.add_argument("-s", help="path to topology file", metavar="topology", required=True)
-    argparser.add_argument("-f", help="path to trajectory file", metavar="trajectory", required=True)
+    argparser.add_argument("-s", help="path to topology file", metavar="topology", required=False)
+    argparser.add_argument("-f", help="path to trajectory file. Can be a single PDB file with frames in which case the topology is not needed.", metavar="trajectory", required=True)
     argparser.add_argument("-o", help="path to the output file with s2 order parameters", metavar="output", required=True)
     argparser.add_argument("-e", help="the last frame for the analaysis", metavar="last_frame", type=int)
 
@@ -97,8 +101,9 @@ if __name__ == "__main__":
     if last_frame is None:  last_frame = -1
 
     # files?
-    assert os.path.isfile(topo_s)
     assert os.path.isfile(traj_f)
+    if not traj_f.endswith('.pdb'):
+        assert os.path.isfile(topo_s)
 
     # do not let overwrite
     if os.path.isfile(output_s2_file):
@@ -106,7 +111,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # read the trajectory using MDAnalysis
-    u = MDAnalysis.Universe(topo_s, traj_f)
+    if topo_s is not None:
+        u = MDAnalysis.Universe(topo_s, traj_f)
+    else:
+        u = MDAnalysis.Universe(traj_f)
     print "Number of all frames in the trajctory: ", len(u.trajectory)
 
     # compute s2 order parameters

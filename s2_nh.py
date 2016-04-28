@@ -36,6 +36,7 @@ def s2(universe, frames_no=-1):
 
     # corresponding resids of the selected atoms
     resids = hn.resids
+    resnames3letter = hn.resnames
 
     # create zero matrices 3x3 for each residue
     # will hold the sums for each residue
@@ -76,7 +77,7 @@ def s2(universe, frames_no=-1):
     assert all([0 <= s2 <= 1 for s2 in s2s])
 
     # add the residue indexes to each s2
-    s2s_res = zip(resids, s2s)
+    s2s_res = zip(resids, s2s, resnames3letter)
 
     return s2s_res
 
@@ -121,7 +122,7 @@ if __name__ == "__main__":
     s2s_data = s2(u, frames_no=last_frame)
 
     # output to file
-    output = os.linesep.join(["%d %f" % (resid, nhS2s) for resid, nhS2s in s2s_data]) + os.linesep
+    output = os.linesep.join(["%d %f %s" % (resid, nhS2s, resname3letter) for resid, nhS2s, resname3letter in s2s_data]) + os.linesep
     open(output_s2_file, 'w').write(output)
 
     print

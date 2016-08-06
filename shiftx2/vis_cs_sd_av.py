@@ -82,6 +82,7 @@ Where E:beta strand, T:turn, S: bend
 Note 1: that the extra residues on both ends have been deleted.
 Note 2: proline residues and their corresponding classificaiton has been removed
 """
+# ntoe that the prolines have been deleted ...
 secondary_strs = '  TT EEE   SS EEEE     SS  EEEEEEEEETS  EEEEE  SS SEEEE    TSEEEEEEEEEETTEE   EEEEE '
 assert len(secondary_strs) == len(res_aaa)
 currentAxis = plt.gca()

@@ -16,8 +16,8 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser(description="Removes the water/sol if any of the atoms reside withing the request Z dimension")
     argparser.add_argument("-f", help="filename .gro from which to remove", metavar="source .gro filename", required=True, type=str)
     argparser.add_argument("-o", help="name of the filename", metavar="output filename", required=True)
-    argparser.add_argument("-b", help="start/begin of Z dimension", metavar="float", required=True, type=float)
-    argparser.add_argument("-e", help="end of Z dimension", metavar="float", type=float, required=True)
+    argparser.add_argument("-b", help="start/begin of Z dimension in angstroms", metavar="float", required=True, type=float)
+    argparser.add_argument("-e", help="end of Z dimension in angstroms", metavar="float", type=float, required=True)
 
     # parse arguments
     args = argparser.parse_args(sys.argv[1:])
@@ -45,6 +45,8 @@ if __name__ == "__main__":
     if len(exile_list_resids) == 0:
         print 'No molecules to be removed'
         exit(0)
+
+    print 'Number of SOL molecules to be removed: ', len(exile_list_resids)
 
     # take the atoms from not excluded molecules
     survivors_ids = []

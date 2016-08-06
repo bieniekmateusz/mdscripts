@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 """
+    Quick and dirty script. Dirty dirty dirty. 
     Visualise the output of the 'shiftx2_cs_sd_av' script.
 """
 

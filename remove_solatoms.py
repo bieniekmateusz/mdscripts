@@ -37,10 +37,12 @@ if __name__ == "__main__":
     exile_list_resids = set()
     for atom in u.atoms:
         # is solvent?
-        if atom.resname == 'SOL':
-            zpos = atom.position[2]
-            if zpos > zbegin and zpos < zend:
-                exile_list_resids.add(atom.resid)
+        if atom.resname != 'SOL':
+            continue
+
+        zpos = atom.position[2]
+        if zpos > zbegin and zpos < zend:
+            exile_list_resids.add(atom.resid)
 
     if len(exile_list_resids) == 0:
         print 'No molecules to be removed'
@@ -48,12 +50,8 @@ if __name__ == "__main__":
 
     print 'Number of SOL molecules to be removed: ', len(exile_list_resids)
 
-    # take the atoms from not excluded molecules
-    survivors_ids = []
-    for atom in u.atoms:
-        if atom.resid in exile_list_resids:
-            continue
-        survivors_ids.append(atom.id)
+    # atom indices without the excluded molecules
+    survivors_ids = [atom.id for atom in u.atoms if atom.resid not in exile_list_resids]
     filtered = u.atoms[survivors_ids]
 
     if filtered.n_atoms == 0:

@@ -6,7 +6,7 @@ Calculation of s2 of the N-H of the backbone using the equation 12 of the follow
 http://www.sciencedirect.com/science/article/pii/S0022283684700908
 
 Before use:
-- install MDAnalysis, numpy, scipy (pip install ...)
+- install MDAnalysis, numpy, scipy (pip install ..)
 
 Ensure that your trajectory has removed degrees of freedom (in gromacs, gmx trjconv -fit rot+trans)
 
